@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "playwright test"
   },
   "private": true,
   "dependencies": {
@@ -27,11 +29,20 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.13",
+    "@angular-eslint/builder": "^14.4.0",
+    "@angular-eslint/eslint-plugin": "^14.4.0",
+    "@angular-eslint/eslint-plugin-template": "^14.4.0",
+    "@angular-eslint/schematics": "^14.4.0",
+    "@angular-eslint/template-parser": "^14.4.0",
     "@angular/cli": "~14.2.13",
     "@angular/compiler-cli": "^14.2.0",
     "@playwright/test": "^1.56.1",
     "@types/jasmine": "~4.0.0",
+    "@types/node": "^18.19.0",
     "@types/plotly.js": "^3.0.8",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
     "jasmine-core": "~4.3.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
