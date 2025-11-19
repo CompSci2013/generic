@@ -1,0 +1,15 @@
+<div class="range-filter">
+  <input
+    type="number"
+    [(ngModel)]="rangeValue.min"
+    (ngModelChange)="onRangeChange()"
+    [placeholder]="'Min'"
+    class="range-input">
+  <span class="range-separator">-</span>
+  <input
+    type="number"
+    [(ngModel)]="rangeValue.max"
+    (ngModelChange)="onRangeChange()"
+    [placeholder]="'Max'"
+    class="range-input">
+</div>

@@ -1,0 +1,8 @@
+<div class="filter-chips">
+  <p-chip
+    *ngFor="let chip of chips"
+    [label]="chip.label"
+    [removable]="true"
+    (onRemove)="onChipRemove(chip.filterId)">
+  </p-chip>
+</div>
