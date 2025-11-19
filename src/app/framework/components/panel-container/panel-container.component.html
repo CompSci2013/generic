@@ -1,0 +1,111 @@
+<div
+  class="panel-container"
+  [ngClass]="orientationClass"
+  [style.gap]="containerGap"
+  cdkDropList
+  [cdkDropListDisabled]="!config.enableDragDrop"
+  [id]="cdkDropListId"
+  (cdkDropListDropped)="onDrop($event)">
+
+  <div
+    *ngFor="let panel of visiblePanels; trackBy: trackPanel"
+    class="panel-wrapper"
+    [ngClass]="[
+      panel.cssClass || '',
+      panel.collapsed ? 'collapsed' : '',
+      canDrag(panel) ? 'draggable' : 'non-draggable'
+    ]"
+    cdkDrag
+    [cdkDragDisabled]="!canDrag(panel)">
+
+    <!-- Drag handle placeholder (shown when CDK creates the drag preview) -->
+    <div *cdkDragPlaceholder class="panel-placeholder">
+      <div class="placeholder-content">
+        <i class="pi pi-arrows-v"></i>
+        <span>Drop here</span>
+      </div>
+    </div>
+
+    <!-- Panel Card -->
+    <div class="panel-card">
+
+      <!-- Panel Header -->
+      <div class="panel-header" [ngClass]="{ 'draggable-header': canDrag(panel) }">
+
+        <!-- Drag handle -->
+        <div
+          *ngIf="canDrag(panel)"
+          class="drag-handle"
+          cdkDragHandle
+          title="Drag to reorder">
+          <i class="pi pi-bars"></i>
+        </div>
+
+        <!-- Panel icon -->
+        <i *ngIf="panel.icon" [class]="panel.icon" class="panel-icon"></i>
+
+        <!-- Panel title and subtitle -->
+        <div class="panel-title-section">
+          <h3 class="panel-title">{{ panel.title }}</h3>
+          <p *ngIf="panel.subtitle" class="panel-subtitle">{{ panel.subtitle }}</p>
+        </div>
+
+        <!-- Header actions -->
+        <div class="panel-actions">
+
+          <!-- Collapse/Expand button -->
+          <button
+            *ngIf="panel.collapsible"
+            class="panel-action-btn collapse-btn"
+            [title]="panel.collapsed ? 'Expand panel' : 'Collapse panel'"
+            (click)="toggleCollapse(panel)">
+            <i [class]="panel.collapsed ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
+          </button>
+
+          <!-- Pop-out button (placeholder for future integration) -->
+          <button
+            *ngIf="panel.popOutEnabled"
+            class="panel-action-btn popout-btn"
+            title="Pop out to new window"
+            disabled>
+            <i class="pi pi-external-link"></i>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Panel Content -->
+      <div
+        class="panel-content"
+        *ngIf="!panel.collapsed"
+        [@slideDown]="!panel.collapsed"
+        [style.min-height.px]="panel.minHeight"
+        [style.max-height.px]="panel.maxHeight">
+
+        <!-- Component content -->
+        <ng-container *ngIf="panel.component">
+          <ng-container *ngComponentOutlet="panel.component"></ng-container>
+        </ng-container>
+
+        <!-- Template content -->
+        <ng-container *ngIf="panel.contentTemplate">
+          <ng-container *ngTemplateOutlet="panel.contentTemplate; context: { $implicit: panel.data }"></ng-container>
+        </ng-container>
+
+        <!-- Placeholder if neither component nor template provided -->
+        <div *ngIf="!panel.component && !panel.contentTemplate" class="panel-placeholder-content">
+          <i class="pi pi-inbox"></i>
+          <p>No content configured for this panel</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="visiblePanels.length === 0" class="empty-state">
+    <i class="pi pi-th-large"></i>
+    <p>No panels to display</p>
+  </div>
+
+</div>
