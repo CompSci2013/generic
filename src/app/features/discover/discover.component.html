@@ -1,0 +1,35 @@
+<div class="discover-container">
+  <div class="discover-header">
+    <h1>Automobile Discovery</h1>
+    <p class="subtitle">Search and explore automobile data</p>
+  </div>
+
+  <div class="discover-content">
+    <!-- Filters section (placeholder for future filter UI) -->
+    <div class="filters-section">
+      <p class="info-text">
+        Showing {{ totalRecords | number }} vehicles
+        <span *ngIf="loading" class="loading-indicator"> - Loading...</span>
+      </p>
+    </div>
+
+    <!-- Data table -->
+    <div class="table-section">
+      <app-base-data-table
+        [data]="data"
+        [columns]="columns"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        [rows]="filters.size"
+        [paginator]="true"
+        [rowsPerPageOptions]="[10, 20, 50, 100]"
+        [showGridlines]="true"
+        [stripedRows]="true"
+        [rowHover]="true"
+        dataKey="id"
+        (sortChange)="onSort($event)"
+        (pageChange)="onPageChange($event)"
+      ></app-base-data-table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+.discover-container {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.discover-header {
+  margin-bottom: 2rem;
+
+  h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+.discover-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.filters-section {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 4px solid #007bff;
+
+  .info-text {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #495057;
+  }
+
+  .loading-indicator {
+    color: #007bff;
+    font-style: italic;
+  }
+}
+
+.table-section {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .discover-container {
+    padding: 1rem;
+  }
+
+  .discover-header h1 {
+    font-size: 1.5rem;
+  }
+}

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService } from '../../../framework/core/services/api.service';
+import { map } from 'rxjs/operators';
+import { ApiService } from '../../../app/framework/core/services';
 import { AutoSearchFilters, AutoData, AutoStatistics, AutoDataResponse, VinInstance } from '../models';
 
 /**
@@ -31,7 +32,15 @@ export class AutoApiAdapter {
    */
   fetchData(filters: AutoSearchFilters): Observable<AutoDataResponse> {
     const endpoint = `${this.baseUrl}/vehicles/details`;
-    return this.api.get<AutoDataResponse>(endpoint, this.prepareParams(filters));
+    return this.api.get<AutoData>(endpoint, this.prepareParams(filters)).pipe(
+      map(response => ({
+        data: response.results,
+        total: response.total,
+        page: response.page,
+        size: response.size,
+        hasMore: response.page < response.totalPages
+      }))
+    );
   }
 
   /**
@@ -42,7 +51,9 @@ export class AutoApiAdapter {
    */
   fetchStatistics(filters: AutoSearchFilters): Observable<AutoStatistics> {
     const endpoint = `${this.baseUrl}/vehicles/statistics`;
-    return this.api.get<AutoStatistics>(endpoint, this.prepareParams(filters));
+    return this.api.get<AutoStatistics>(endpoint, this.prepareParams(filters)).pipe(
+      map(response => response.statistics || response.results[0])
+    );
   }
 
   /**
@@ -53,7 +64,9 @@ export class AutoApiAdapter {
    */
   fetchVinInstances(vehicleId: string): Observable<VinInstance[]> {
     const endpoint = `${this.baseUrl}/vehicles/${vehicleId}/vins`;
-    return this.api.get<VinInstance[]>(endpoint);
+    return this.api.get<VinInstance>(endpoint).pipe(
+      map(response => response.results)
+    );
   }
 
   /**
