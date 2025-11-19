@@ -5,6 +5,7 @@
 
 // Models and interfaces
 export * from './models';
+export * from './interfaces';
 
 // Services
 export * from './services';
