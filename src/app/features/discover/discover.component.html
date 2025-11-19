@@ -1,14 +1,14 @@
 <div class="discover-container">
   <div class="discover-header">
-    <h1>Automobile Discovery</h1>
-    <p class="subtitle">Search and explore automobile data</p>
+    <h1>{{ domainLabel }}</h1>
+    <p class="subtitle">Search and explore data</p>
   </div>
 
   <div class="discover-content">
     <!-- Filters section (placeholder for future filter UI) -->
     <div class="filters-section">
       <p class="info-text">
-        Showing {{ totalRecords | number }} vehicles
+        Showing {{ totalRecords | number }} records
         <span *ngIf="loading" class="loading-indicator"> - Loading...</span>
       </p>
     </div>
@@ -20,7 +20,7 @@
         [columns]="columns"
         [totalRecords]="totalRecords"
         [loading]="loading"
-        [rows]="filters.size"
+        [rows]="pageSize"
         [paginator]="true"
         [rowsPerPageOptions]="[10, 20, 50, 100]"
         [showGridlines]="true"
