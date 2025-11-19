@@ -11,3 +11,6 @@ export * from './services';
 
 // Interceptors
 export * from './interceptors';
+
+// Utilities
+export * from './utils';
