@@ -5,3 +5,5 @@
 
 export * from './api-response.interface';
 export * from './api-request.interface';
+export * from './resource-state.interface';
+export * from './resource-config.interface';
