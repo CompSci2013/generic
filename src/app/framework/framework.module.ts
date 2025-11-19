@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 // Angular CDK modules
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -8,10 +9,12 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
 
 // Framework components
 import { BaseDataTableComponent } from './components/base-data-table/base-data-table.component';
 import { PanelContainerComponent } from './components/panel-container/panel-container.component';
+import { HierarchicalPickerComponent } from './components/hierarchical-picker/hierarchical-picker.component';
 
 /**
  * Framework Module
@@ -22,6 +25,7 @@ import { PanelContainerComponent } from './components/panel-container/panel-cont
  * Components:
  * - BaseDataTableComponent: Generic table with sorting, pagination, selection
  * - PanelContainerComponent: Generic panel container with drag-drop, collapse, persistence
+ * - HierarchicalPickerComponent: N-level cascading picker (country→state→city, etc.)
  *
  * Future components (when needed):
  * - BasePickerComponent
@@ -32,24 +36,31 @@ import { PanelContainerComponent } from './components/panel-container/panel-cont
 @NgModule({
   declarations: [
     BaseDataTableComponent,
-    PanelContainerComponent
+    PanelContainerComponent,
+    HierarchicalPickerComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
     DragDropModule,
     TableModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    DropdownModule
   ],
   exports: [
     BaseDataTableComponent,
     PanelContainerComponent,
+    HierarchicalPickerComponent,
+    // Export Angular modules for convenience
+    FormsModule,
     // Export CDK modules for convenience
     DragDropModule,
     // Export PrimeNG modules for convenience
     TableModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    DropdownModule
   ]
 })
 export class FrameworkModule { }
