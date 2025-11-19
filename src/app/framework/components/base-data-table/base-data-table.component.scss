@@ -27,3 +27,150 @@
     background-color: rgba(255, 255, 255, 0.8);
   }
 }
+
+/**
+ * Detail expansion styles (F17)
+ */
+
+// Detail loading state
+.detail-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: #6c757d;
+
+  i {
+    font-size: 1.25rem;
+    color: var(--primary-color, #2196F3);
+  }
+}
+
+// Detail content container
+.detail-content {
+  padding: 16px;
+  background: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+// Nested table container
+.nested-table-container {
+  background: white;
+  border-radius: 4px;
+  padding: 12px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+// Detail empty state
+.detail-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px;
+  background: white;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: #6c757d;
+  text-align: center;
+
+  i {
+    font-size: 1.5rem;
+    color: #adb5bd;
+  }
+}
+
+// Nested table styling
+::ng-deep {
+  .nested-table-container {
+    .p-datatable {
+      font-size: 0.875rem;
+
+      .p-datatable-thead > tr > th {
+        background: #f8f9fa;
+        padding: 0.75rem;
+        font-weight: 600;
+        font-size: 0.8125rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        color: #495057;
+        border-bottom: 2px solid #dee2e6;
+      }
+
+      .p-datatable-tbody > tr > td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .p-datatable-tbody > tr:hover {
+        background: #f8f9fa;
+      }
+
+      .p-paginator {
+        padding: 0.5rem 0.75rem;
+        background: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+
+        .p-paginator-element {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .detail-loading {
+    background: #2b2b2b;
+    color: #adb5bd;
+  }
+
+  .detail-content {
+    background: #1e1e1e;
+    border-top-color: #3a3a3a;
+  }
+
+  .nested-table-container {
+    background: #2b2b2b;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .detail-empty {
+    background: #2b2b2b;
+    color: #adb5bd;
+
+    i {
+      color: #6c757d;
+    }
+  }
+
+  ::ng-deep {
+    .nested-table-container {
+      .p-datatable {
+        .p-datatable-thead > tr > th {
+          background: #1e1e1e;
+          color: #e9ecef;
+          border-bottom-color: #3a3a3a;
+        }
+
+        .p-datatable-tbody > tr > td {
+          border-bottom-color: #3a3a3a;
+        }
+
+        .p-datatable-tbody > tr:hover {
+          background: #333333;
+        }
+
+        .p-paginator {
+          background: #1e1e1e;
+          border-top-color: #3a3a3a;
+        }
+      }
+    }
+  }
+}

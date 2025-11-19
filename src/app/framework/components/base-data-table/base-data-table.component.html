@@ -81,15 +81,106 @@
 
   <!-- Row expansion template -->
   <ng-template
-    *ngIf="expandable && expansionTemplate"
+    *ngIf="expandable"
     pTemplate="rowexpansion"
     let-row
   >
     <tr>
       <td [attr.colspan]="getVisibleColumns().length + 1">
-        <ng-container
-          *ngTemplateOutlet="expansionTemplate; context: { $implicit: row }"
-        ></ng-container>
+
+        <!-- Loading state -->
+        <div *ngIf="isDetailLoading(row)" class="detail-loading">
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>{{ getDetailLoadingMessage() }}</span>
+        </div>
+
+        <!-- Detail content -->
+        <div *ngIf="!isDetailLoading(row)" class="detail-content" [ngClass]="detailConfig?.styleClass">
+
+          <!-- Nested table mode -->
+          <div *ngIf="detailConfig && isNestedTableMode()" class="nested-table-container">
+            <p-table
+              *ngIf="getDetailItems(row).length > 0"
+              [value]="getDetailItems(row)"
+              [columns]="getDetailColumns()"
+              [scrollHeight]="getDetailScrollHeight()"
+              [styleClass]="getDetailTableClass()"
+              [rowHover]="detailConfig.rowHover !== false"
+              [dataKey]="detailConfig.getDetailId ? 'id' : 'id'"
+              [paginator]="detailConfig.detailPaginator === true"
+              [rows]="detailConfig.detailRows || 10"
+              [rowsPerPageOptions]="getDetailRowsPerPageOptions()"
+              responsiveLayout="scroll"
+            >
+              <!-- Nested table header -->
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th
+                    *ngFor="let col of columns"
+                    [pSortableColumn]="col.sortable ? col.field : null"
+                    [ngClass]="getAlignClass(col)"
+                    [class]="col.cssClass"
+                    [ngStyle]="{ width: col.width, 'min-width': col.minWidth }"
+                  >
+                    {{ col.header }}
+                    <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+                  </th>
+                </tr>
+              </ng-template>
+
+              <!-- Nested table body -->
+              <ng-template pTemplate="body" let-detailRow let-columns="columns">
+                <tr>
+                  <td
+                    *ngFor="let col of columns"
+                    [ngClass]="getAlignClass(col)"
+                    [class]="col.cssClass"
+                  >
+                    <ng-container *ngIf="col.template; else defaultDetailCell">
+                      <ng-container
+                        *ngTemplateOutlet="col.template; context: { $implicit: detailRow, column: col }"
+                      ></ng-container>
+                    </ng-container>
+
+                    <ng-template #defaultDetailCell>
+                      {{ getCellValue(detailRow, col) }}
+                    </ng-template>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <!-- Nested table empty message -->
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td [attr.colspan]="getDetailColumns().length">
+                    {{ getDetailEmptyMessage() }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <!-- Empty state for details -->
+            <div *ngIf="getDetailItems(row).length === 0" class="detail-empty">
+              <i class="pi pi-info-circle"></i>
+              <span>{{ getDetailEmptyMessage() }}</span>
+            </div>
+          </div>
+
+          <!-- Custom template mode -->
+          <div *ngIf="getDetailTemplate() && !isNestedTableMode() && getDetailTemplate()">
+            <ng-container
+              *ngTemplateOutlet="getDetailTemplate()!; context: { $implicit: row, details: getDetailItems(row) }"
+            ></ng-container>
+          </div>
+
+          <!-- Legacy expansion template support -->
+          <div *ngIf="!detailConfig && expansionTemplate">
+            <ng-container
+              *ngTemplateOutlet="expansionTemplate; context: { $implicit: row }"
+            ></ng-container>
+          </div>
+
+        </div>
       </td>
     </tr>
   </ng-template>
