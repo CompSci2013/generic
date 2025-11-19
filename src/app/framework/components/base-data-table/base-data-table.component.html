@@ -33,7 +33,8 @@
       <th
         *ngFor="let col of columns; trackBy: trackByField"
         [pSortableColumn]="col.sortable ? col.field : null"
-        [ngClass]="[col.cssClass, getAlignClass(col)]"
+        [ngClass]="getAlignClass(col)"
+        [class]="col.cssClass"
         [ngStyle]="{ width: col.width, 'min-width': col.minWidth }"
       >
         {{ col.header }}
@@ -60,7 +61,8 @@
       <!-- Data cells -->
       <td
         *ngFor="let col of columns; trackBy: trackByField"
-        [ngClass]="[col.cssClass, getAlignClass(col)]"
+        [ngClass]="getAlignClass(col)"
+        [class]="col.cssClass"
       >
         <!-- Custom template if provided -->
         <ng-container *ngIf="col.template; else defaultCell">

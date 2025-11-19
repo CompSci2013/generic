@@ -32,9 +32,17 @@ export class AutoApiAdapter {
    */
   fetchData(filters: AutoSearchFilters): Observable<AutoDataResponse> {
     const endpoint = `${this.baseUrl}/vehicles/details`;
-    return this.api.get<AutoData>(endpoint, this.prepareParams(filters)).pipe(
+    return this.api.get<any>(endpoint, this.prepareParams(filters)).pipe(
       map(response => ({
-        data: response.results,
+        data: response.results.map((item: any) => ({
+          id: item.vehicle_id,
+          manufacturer: item.manufacturer,
+          model: item.model,
+          year: item.year,
+          bodyClass: item.body_class,
+          vinCount: item.instance_count,
+          dataSource: item.data_source
+        })),
         total: response.total,
         page: response.page,
         size: response.size,

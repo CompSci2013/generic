@@ -69,7 +69,7 @@ export const AUTO_TABLE_COLUMNS: TableColumn<AutoData>[] = [
     filterable: false,
     width: '120px',
     align: 'right',
-    formatter: (value: number) => value.toLocaleString()
+    formatter: (value: number) => value != null ? value.toLocaleString() : '0'
   },
   {
     field: 'dataSource',
