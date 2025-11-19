@@ -1,0 +1,9 @@
+<div class="date-range-filter">
+  <p-calendar
+    [(ngModel)]="dateRange"
+    (ngModelChange)="onDateChange()"
+    selectionMode="range"
+    [placeholder]="definition.label"
+    dateFormat="yy-mm-dd">
+  </p-calendar>
+</div>

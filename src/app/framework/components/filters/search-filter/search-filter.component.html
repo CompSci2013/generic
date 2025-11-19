@@ -1,0 +1,8 @@
+<div class="search-filter">
+  <input
+    type="text"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="onSearchChange()"
+    [placeholder]="definition.label"
+    class="search-input">
+</div>
