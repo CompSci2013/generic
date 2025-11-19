@@ -1,0 +1,35 @@
+/**
+ * Base Picker Component Styles
+ * Domain-agnostic styling for the generic picker component
+ */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.picker-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.picker-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-color, #495057);
+  margin-bottom: 0.25rem;
+}
+
+.required-indicator {
+  color: var(--error-color, #ef4444);
+  margin-left: 0.25rem;
+}
+
+::ng-deep {
+  // Ensure dropdowns work well with the component
+  .p-dropdown,
+  .p-multiselect {
+    width: 100%;
+  }
+}
