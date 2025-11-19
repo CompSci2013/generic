@@ -1,0 +1,17 @@
+<div class="chart-wrapper" [ngClass]="getStyleClass()">
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading()" class="chart-loading">
+    <p-progressSpinner
+      [style]="{ width: '50px', height: '50px' }"
+      strokeWidth="4"
+    ></p-progressSpinner>
+    <span class="loading-text">Loading chart...</span>
+  </div>
+
+  <!-- Chart container -->
+  <div
+    #chartContainer
+    class="chart-container"
+    [class.hidden]="isLoading()"
+  ></div>
+</div>
