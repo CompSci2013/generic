@@ -1,0 +1,105 @@
+<p-table
+  [value]="data"
+  [columns]="getVisibleColumns()"
+  [lazy]="true"
+  [loading]="loading"
+  [totalRecords]="totalRecords"
+  [paginator]="paginator"
+  [rows]="rows"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [styleClass]="styleClass"
+  [scrollHeight]="scrollHeight"
+  [showGridlines]="showGridlines"
+  [stripedRows]="stripedRows"
+  [rowHover]="rowHover"
+  [dataKey]="dataKey"
+  [selectionMode]="selectable ? selectionMode : undefined"
+  [(selection)]="selection"
+  [expandedRowKeys]="expandedRows"
+  (onSort)="onSort($event)"
+  (onPage)="onPage($event)"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowExpand)="onRowExpand($event)"
+  (onRowCollapse)="onRowCollapse($event)"
+  responsiveLayout="scroll"
+>
+  <!-- Header -->
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <!-- Expander column -->
+      <th *ngIf="expandable" style="width: 3rem"></th>
+
+      <!-- Data columns -->
+      <th
+        *ngFor="let col of columns; trackBy: trackByField"
+        [pSortableColumn]="col.sortable ? col.field : null"
+        [ngClass]="[col.cssClass, getAlignClass(col)]"
+        [ngStyle]="{ width: col.width, 'min-width': col.minWidth }"
+      >
+        {{ col.header }}
+        <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+
+  <!-- Body -->
+  <ng-template pTemplate="body" let-row let-columns="columns" let-expanded="expanded">
+    <tr [pSelectableRow]="row">
+      <!-- Expander cell -->
+      <td *ngIf="expandable">
+        <button
+          type="button"
+          pButton
+          pRipple
+          [pRowToggler]="row"
+          class="p-button-text p-button-rounded p-button-plain"
+          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+        ></button>
+      </td>
+
+      <!-- Data cells -->
+      <td
+        *ngFor="let col of columns; trackBy: trackByField"
+        [ngClass]="[col.cssClass, getAlignClass(col)]"
+      >
+        <!-- Custom template if provided -->
+        <ng-container *ngIf="col.template; else defaultCell">
+          <ng-container
+            *ngTemplateOutlet="col.template; context: { $implicit: row, column: col }"
+          ></ng-container>
+        </ng-container>
+
+        <!-- Default cell rendering -->
+        <ng-template #defaultCell>
+          {{ getCellValue(row, col) }}
+        </ng-template>
+      </td>
+    </tr>
+  </ng-template>
+
+  <!-- Row expansion template -->
+  <ng-template
+    *ngIf="expandable && expansionTemplate"
+    pTemplate="rowexpansion"
+    let-row
+  >
+    <tr>
+      <td [attr.colspan]="getVisibleColumns().length + 1">
+        <ng-container
+          *ngTemplateOutlet="expansionTemplate; context: { $implicit: row }"
+        ></ng-container>
+      </td>
+    </tr>
+  </ng-template>
+
+  <!-- Empty message -->
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="getVisibleColumns().length + (expandable ? 1 : 0)">
+        No records found.
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
