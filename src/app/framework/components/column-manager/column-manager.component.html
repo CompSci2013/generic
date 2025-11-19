@@ -1,0 +1,167 @@
+<div class="column-manager" [ngClass]="config.styleClass">
+  <!-- Header -->
+  <div class="column-manager-header">
+    <h3 class="column-manager-title">
+      <i class="pi pi-table"></i>
+      {{ title }}
+    </h3>
+    <div class="column-count">
+      <span class="visible-count">{{ visibleCount }}</span>
+      <span class="count-separator">/</span>
+      <span class="total-count">{{ totalCount }}</span>
+      <span class="count-label">visible</span>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="column-manager-actions">
+    <button
+      *ngIf="allowToggleVisibility"
+      type="button"
+      class="action-button show-all"
+      (click)="showAll()"
+      title="Show all columns"
+    >
+      <i class="pi pi-eye"></i>
+      Show All
+    </button>
+
+    <button
+      *ngIf="allowToggleVisibility"
+      type="button"
+      class="action-button hide-all"
+      (click)="hideAll()"
+      title="Hide all columns (respecting minimum)"
+    >
+      <i class="pi pi-eye-slash"></i>
+      Hide All
+    </button>
+
+    <button
+      *ngIf="showReset"
+      type="button"
+      class="action-button reset"
+      (click)="onReset()"
+      title="Reset to default configuration"
+    >
+      <i class="pi pi-refresh"></i>
+      Reset
+    </button>
+  </div>
+
+  <!-- Column List -->
+  <div
+    class="column-list"
+    cdkDropList
+    [cdkDropListDisabled]="!allowReorder"
+    (cdkDropListDropped)="onDrop($event)"
+  >
+    <div
+      *ngFor="let columnState of columnStates; trackBy: trackByField"
+      class="column-item"
+      [ngClass]="{
+        'visible': columnState.visible,
+        'hidden': !columnState.visible,
+        'locked': columnState.locked
+      }"
+      cdkDrag
+      [cdkDragDisabled]="columnState.locked || !allowReorder"
+    >
+      <!-- Drag Handle -->
+      <div
+        *ngIf="allowReorder && !columnState.locked"
+        class="drag-handle"
+        cdkDragHandle
+        title="Drag to reorder"
+      >
+        <i class="pi pi-bars"></i>
+      </div>
+
+      <!-- Lock Icon -->
+      <div *ngIf="columnState.locked" class="lock-icon" title="Column is locked">
+        <i class="pi pi-lock"></i>
+      </div>
+
+      <!-- Visibility Checkbox -->
+      <div
+        *ngIf="allowToggleVisibility"
+        class="visibility-toggle"
+        [class.disabled]="!canHideColumn(columnState)"
+      >
+        <input
+          type="checkbox"
+          [id]="'column-' + columnState.field"
+          [checked]="columnState.visible"
+          [disabled]="columnState.locked || !canHideColumn(columnState)"
+          (change)="onToggleVisibility(columnState)"
+        />
+        <label
+          [for]="'column-' + columnState.field"
+          [title]="canHideColumn(columnState) ? 'Toggle visibility' : 'Cannot hide (minimum columns required)'"
+        ></label>
+      </div>
+
+      <!-- Column Info -->
+      <div class="column-info">
+        <div class="column-header">{{ columnState.header }}</div>
+        <div class="column-field">{{ columnState.field }}</div>
+      </div>
+
+      <!-- Width Control -->
+      <div *ngIf="allowResize" class="width-control">
+        <label [for]="'width-' + columnState.field" class="width-label">Width:</label>
+        <input
+          type="text"
+          [id]="'width-' + columnState.field"
+          class="width-input"
+          [value]="columnState.width || ''"
+          placeholder="auto"
+          (blur)="onWidthChange(columnState, $any($event.target).value)"
+          title="Column width (e.g., 100px, 20%)"
+        />
+      </div>
+
+      <!-- Drag Preview -->
+      <div class="drag-preview" *cdkDragPreview>
+        <div class="drag-preview-content">
+          <i class="pi pi-bars"></i>
+          {{ columnState.header }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="columnStates.length === 0" class="column-list-empty">
+    <i class="pi pi-info-circle"></i>
+    <span>No columns available</span>
+  </div>
+
+  <!-- Footer Info -->
+  <div class="column-manager-footer">
+    <div class="footer-info">
+      <i class="pi pi-info-circle"></i>
+      <span *ngIf="allowReorder && allowToggleVisibility && allowResize">
+        Drag to reorder • Click checkbox to show/hide • Enter width to resize
+      </span>
+      <span *ngIf="allowReorder && allowToggleVisibility && !allowResize">
+        Drag to reorder • Click checkbox to show/hide
+      </span>
+      <span *ngIf="allowReorder && !allowToggleVisibility && allowResize">
+        Drag to reorder • Enter width to resize
+      </span>
+      <span *ngIf="!allowReorder && allowToggleVisibility && allowResize">
+        Click checkbox to show/hide • Enter width to resize
+      </span>
+      <span *ngIf="allowReorder && !allowToggleVisibility && !allowResize">
+        Drag to reorder columns
+      </span>
+      <span *ngIf="!allowReorder && allowToggleVisibility && !allowResize">
+        Click checkbox to show/hide columns
+      </span>
+      <span *ngIf="!allowReorder && !allowToggleVisibility && allowResize">
+        Enter width to resize columns
+      </span>
+    </div>
+  </div>
+</div>

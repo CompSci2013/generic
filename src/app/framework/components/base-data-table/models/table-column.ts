@@ -75,4 +75,10 @@ export interface TableColumn<TData> {
    * @default false
    */
   filterable?: boolean;
+
+  /**
+   * Whether this column is locked (cannot be hidden or reordered)
+   * @default false
+   */
+  locked?: boolean;
 }
