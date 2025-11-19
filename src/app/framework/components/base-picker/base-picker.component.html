@@ -1,0 +1,67 @@
+<div class="picker-container" [ngStyle]="{ width: getDropdownWidth() }">
+  <!-- Label -->
+  <label *ngIf="config.label" [for]="config.id" class="picker-label">
+    {{ config.label }}
+    <span *ngIf="isRequired()" class="required-indicator">*</span>
+  </label>
+
+  <!-- Single Select Dropdown -->
+  <p-dropdown
+    *ngIf="!isMultiSelect()"
+    [id]="config.id"
+    [options]="filteredItems"
+    [(ngModel)]="selectedItems"
+    [optionLabel]="getItemLabel.bind(this)"
+    [optionValue]="getItemValue.bind(this)"
+    [placeholder]="getPlaceholder()"
+    [filter]="isSearchable()"
+    [showClear]="showClearButton()"
+    [disabled]="isDisabled() || loading || isLoading"
+    [styleClass]="getStyleClass()"
+    [loading]="loading || isLoading"
+    (onChange)="onSelectionChange($event)"
+    (onFilter)="onSearch($event)"
+    [appendTo]="'body'"
+    [autoDisplayFirst]="false"
+  >
+    <!-- Custom item template if provided -->
+    <ng-template *ngIf="config.itemTemplate" pTemplate="item" let-item>
+      <ng-container *ngTemplateOutlet="config.itemTemplate; context: { $implicit: item }"></ng-container>
+    </ng-template>
+
+    <!-- Custom selected item template if provided -->
+    <ng-template *ngIf="config.selectedItemTemplate" pTemplate="selectedItem" let-item>
+      <ng-container *ngTemplateOutlet="config.selectedItemTemplate; context: { $implicit: item }"></ng-container>
+    </ng-template>
+  </p-dropdown>
+
+  <!-- Multiple Select -->
+  <p-multiSelect
+    *ngIf="isMultiSelect()"
+    [id]="config.id"
+    [options]="filteredItems"
+    [(ngModel)]="selectedItems"
+    [optionLabel]="getItemLabel.bind(this)"
+    [optionValue]="getItemValue.bind(this)"
+    [placeholder]="getPlaceholder()"
+    [filter]="isSearchable()"
+    [showClear]="showClearButton()"
+    [disabled]="isDisabled() || loading || isLoading"
+    [styleClass]="getStyleClass()"
+    (onChange)="onSelectionChange($event)"
+    (onFilter)="onSearch($event)"
+    [appendTo]="'body'"
+    [display]="'chip'"
+    [showToggleAll]="true"
+  >
+    <!-- Custom item template if provided -->
+    <ng-template *ngIf="config.itemTemplate" pTemplate="item" let-item>
+      <ng-container *ngTemplateOutlet="config.itemTemplate; context: { $implicit: item }"></ng-container>
+    </ng-template>
+
+    <!-- Custom selected items template if provided -->
+    <ng-template *ngIf="config.selectedItemTemplate" pTemplate="selectedItems" let-items>
+      <ng-container *ngTemplateOutlet="config.selectedItemTemplate; context: { $implicit: items }"></ng-container>
+    </ng-template>
+  </p-multiSelect>
+</div>
