@@ -1,0 +1,91 @@
+<div class="hierarchical-picker" [ngClass]="[orientationClass, config.styleClass || '']">
+
+  <!-- Header -->
+  <div class="picker-header" *ngIf="config.label || config.description">
+    <h3 class="picker-title" *ngIf="config.label">
+      {{ config.label }}
+      <span *ngIf="config.required" class="required-indicator">*</span>
+    </h3>
+    <p class="picker-description" *ngIf="config.description">{{ config.description }}</p>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb-trail" *ngIf="showBreadcrumb">
+    <i class="pi pi-arrow-right breadcrumb-icon"></i>
+    <span class="breadcrumb-item" *ngFor="let item of getBreadcrumb(); let last = last">
+      {{ item }}
+      <i *ngIf="!last" class="pi pi-angle-right breadcrumb-separator"></i>
+    </span>
+  </div>
+
+  <!-- Level Pickers -->
+  <div class="level-pickers-container">
+    <div
+      *ngFor="let level of config.levels; let i = index; trackBy: trackByLevelId"
+      class="level-picker-wrapper"
+      [ngClass]="{
+        'disabled': isLevelDisabled(level, i),
+        'has-selection': getLevelSelection(level),
+        'loading': isLevelLoading(level)
+      }">
+
+      <!-- Level Label -->
+      <label *ngIf="showLabels" class="level-label" [for]="level.pickerConfig.id">
+        {{ level.label }}
+        <span *ngIf="config.required && !config.allowPartialSelection" class="required-indicator">*</span>
+      </label>
+
+      <!-- Picker Dropdown -->
+      <p-dropdown
+        [id]="level.pickerConfig.id"
+        [options]="getLevelItems(level)"
+        [ngModel]="getLevelSelection(level)"
+        [optionLabel]="getOptionLabelField(level)"
+        [dataKey]="getDataKeyField(level)"
+        [placeholder]="level.pickerConfig.placeholder || 'Select ' + level.label"
+        [disabled]="isLevelDisabled(level, i)"
+        [showClear]="level.pickerConfig.showClear !== false && !config.lockParentLevels"
+        [filter]="level.pickerConfig.searchable !== false"
+        [filterBy]="getFilterByFields(level)"
+        [styleClass]="getStyleClass(level)"
+        [autoDisplayFirst]="false"
+        [appendTo]="'body'"
+        (onChange)="onLevelSelectionChange(level, i, $event.value)">
+      </p-dropdown>
+
+      <!-- Loading indicator -->
+      <div class="level-loading" *ngIf="isLevelLoading(level)">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Loading...</span>
+      </div>
+
+      <!-- Empty state -->
+      <div class="level-empty" *ngIf="!isLevelLoading(level) && getLevelItems(level).length === 0 && !isLevelDisabled(level, i)">
+        <i class="pi pi-info-circle"></i>
+        <span>No options available</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer Actions -->
+  <div class="picker-footer" *ngIf="isClearable">
+    <button
+      type="button"
+      class="clear-button"
+      (click)="clear()"
+      [disabled]="config.disabled">
+      <i class="pi pi-times"></i>
+      <span>Clear Selection</span>
+    </button>
+  </div>
+
+  <!-- Completion indicator -->
+  <div class="completion-status" *ngIf="!config.allowPartialSelection">
+    <div class="status-indicator" [ngClass]="{ 'complete': state.isComplete, 'incomplete': !state.isComplete }">
+      <i [class]="state.isComplete ? 'pi pi-check-circle' : 'pi pi-circle'"></i>
+      <span>{{ state.isComplete ? 'Selection Complete' : 'Please complete all levels' }}</span>
+    </div>
+  </div>
+
+</div>
