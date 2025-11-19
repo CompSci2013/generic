@@ -1,0 +1,29 @@
+/**
+ * Base Data Table Component Styles
+ * Domain-agnostic styling for the generic table component
+ */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Text alignment utilities
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+// Loading indicator overlay
+::ng-deep {
+  .p-datatable-loading-overlay {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+}
