@@ -1,0 +1,22 @@
+<div class="popout-container" [class.is-popout]="isPopOut()">
+  <!-- Optional header for pop-out windows -->
+  <div class="popout-header" *ngIf="isPopOut() && title">
+    <h2 class="popout-title">{{ title }}</h2>
+    <button
+      class="popout-close-btn"
+      (click)="closeWindow()"
+      title="Close Window">
+      ×
+    </button>
+  </div>
+
+  <!-- Content area -->
+  <div class="popout-content">
+    <ng-container *ngIf="contentTemplate">
+      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+    </ng-container>
+
+    <!-- Fallback content if no template provided -->
+    <ng-content *ngIf="!contentTemplate"></ng-content>
+  </div>
+</div>
