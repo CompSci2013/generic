@@ -1,0 +1,95 @@
+<div class="table-picker-container">
+  <!-- Title -->
+  <div class="picker-title-bar">
+    <h3 class="picker-title">{{ config.displayName }}</h3>
+  </div>
+
+  <!-- Selection info bar with action buttons -->
+  <div class="picker-selection-bar">
+    <span class="selection-count">{{ selectedCountText }}</span>
+    <div class="selection-actions">
+      <button
+        pButton
+        type="button"
+        label="Clear"
+        class="p-button-text p-button-sm"
+        (click)="onClear()"
+        [disabled]="!canClear"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Apply Selection"
+        class="p-button-sm p-button-danger"
+        (click)="onApply()"
+        [disabled]="!canApply"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="picker-table">
+    <p-table
+      [value]="data"
+      [columns]="config.columns"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="pageSize"
+      [rowsPerPageOptions]="pageSizeOptions"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [rowHover]="true"
+      styleClass="p-datatable-gridlines p-datatable-sm"
+      responsiveLayout="scroll"
+    >
+      <!-- Table Header -->
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <!-- Checkbox column header -->
+          <th style="width: 50px">
+            <!-- Optional: Select All checkbox could go here -->
+          </th>
+
+          <!-- Data columns -->
+          <th
+            *ngFor="let col of columns"
+            [pSortableColumn]="col.sortable ? col.field : null"
+            [ngStyle]="{ width: col.width, 'min-width': col.minWidth }"
+          >
+            {{ col.header }}
+            <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+
+      <!-- Table Body -->
+      <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr>
+          <!-- Checkbox cell -->
+          <td>
+            <p-checkbox
+              [binary]="true"
+              [ngModel]="isRowSelected(row)"
+              [ngModelOptions]="{standalone: true}"
+              (onChange)="onRowSelectionChange(row, $event)"
+            ></p-checkbox>
+          </td>
+
+          <!-- Data cells -->
+          <td *ngFor="let col of columns">
+            {{ getCellValue(row, col) }}
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Empty message -->
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="columns.length + 1" style="text-align: center">
+            No items available
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

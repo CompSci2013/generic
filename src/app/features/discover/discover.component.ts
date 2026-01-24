@@ -5,6 +5,8 @@ import { DOMAIN_CONFIG } from '../../framework/core/services/config-loader.servi
 import { DomainConfig } from '../../framework/core/models/domain-config';
 import { TableColumn } from '../../framework/components/base-data-table/models/table-column';
 import { SortEvent, PageEvent } from '../../framework/components/base-data-table/models/table-event';
+import { TablePickerConfig, TablePickerSelectionEvent } from '../../framework/components/table-picker/models/table-picker-config';
+import { DATA_SOURCE_PICKER_CONFIG, DataSourceItem } from '../../../domain-config/automobile/configs/data-source-picker.config';
 
 /**
  * Generic Discover Component
@@ -46,6 +48,10 @@ export class DiscoverComponent<TFilters = any, TData = any, TStatistics = any> i
 
   // Page size from config
   pageSize = 20;
+
+  // Table picker configuration
+  dataSourcePickerConfig: TablePickerConfig<DataSourceItem> = DATA_SOURCE_PICKER_CONFIG;
+  selectedDataSourceKeys: string[] = [];
 
   // Cleanup
   private destroy$ = new Subject<void>();
@@ -92,6 +98,19 @@ export class DiscoverComponent<TFilters = any, TData = any, TStatistics = any> i
     this.filters = {
       ...(urlFilters as TFilters)
     };
+
+    // Sync picker state from URL filters
+    const filters = this.filters as any;
+    const dataSourceParam = filters.dataSource;
+
+    // Convert comma-separated string to array of keys
+    if (dataSourceParam && typeof dataSourceParam === 'string') {
+      this.selectedDataSourceKeys = dataSourceParam.split(',').map((s: string) => s.trim());
+    } else if (Array.isArray(dataSourceParam)) {
+      this.selectedDataSourceKeys = dataSourceParam;
+    } else {
+      this.selectedDataSourceKeys = [];
+    }
 
     // Fetch data based on new filters
     this.fetchData();
@@ -185,5 +204,44 @@ export class DiscoverComponent<TFilters = any, TData = any, TStatistics = any> i
     const page = filters.page || 1;
     const size = filters.size || this.pageSize;
     return (page - 1) * size;
+  }
+
+  /**
+   * Handle data source picker Apply button
+   */
+  onPickerApply(event: TablePickerSelectionEvent<DataSourceItem>): void {
+    // Update filters with new data source selection
+    const updatedFilters: any = {
+      ...this.filters,
+      dataSource: event.urlValue || undefined,
+      page: 1 // Reset to first page when filters change
+    };
+
+    this.updateUrl(updatedFilters);
+  }
+
+  /**
+   * Handle data source picker Clear button
+   */
+  onPickerClear(): void {
+    this.selectedDataSourceKeys = [];
+    const updatedFilters: any = {
+      ...this.filters,
+      dataSource: undefined,
+      page: 1
+    };
+    this.updateUrl(updatedFilters);
+  }
+
+  /**
+   * Clear all filters
+   */
+  clearFilters(): void {
+    this.selectedDataSourceKeys = [];
+    const updatedFilters: any = {
+      page: 1,
+      size: this.pageSize
+    };
+    this.updateUrl(updatedFilters);
   }
 }

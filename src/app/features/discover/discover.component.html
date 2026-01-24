@@ -5,12 +5,39 @@
   </div>
 
   <div class="discover-content">
-    <!-- Filters section (placeholder for future filter UI) -->
+    <!-- Filters section -->
     <div class="filters-section">
-      <p class="info-text">
-        Showing {{ totalRecords | number }} records
-        <span *ngIf="loading" class="loading-indicator"> - Loading...</span>
-      </p>
+      <div class="filters-header">
+        <h3>Filters</h3>
+        <button
+          pButton
+          type="button"
+          label="Clear All"
+          icon="pi pi-times"
+          class="p-button-text p-button-sm"
+          (click)="clearFilters()"
+          [disabled]="selectedDataSourceKeys.length === 0">
+        </button>
+      </div>
+
+      <div class="filters-grid">
+        <!-- Data Source Picker -->
+        <div class="filter-item">
+          <app-table-picker
+            [config]="dataSourcePickerConfig"
+            [preSelectedKeys]="selectedDataSourceKeys"
+            (selectionApply)="onPickerApply($event)"
+            (selectionClear)="onPickerClear()">
+          </app-table-picker>
+        </div>
+      </div>
+
+      <div class="results-info">
+        <p class="info-text">
+          Showing {{ totalRecords | number }} records
+          <span *ngIf="loading" class="loading-indicator"> - Loading...</span>
+        </p>
+      </div>
     </div>
 
     <!-- Data table -->

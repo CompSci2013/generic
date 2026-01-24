@@ -10,12 +10,15 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CheckboxModule } from 'primeng/checkbox';
 
 // Framework components
 import { BaseDataTableComponent } from './components/base-data-table/base-data-table.component';
 import { PanelContainerComponent } from './components/panel-container/panel-container.component';
 import { HierarchicalPickerComponent } from './components/hierarchical-picker/hierarchical-picker.component';
 import { ColumnManagerComponent } from './components/column-manager/column-manager.component';
+import { TablePickerComponent } from './components/table-picker/table-picker.component';
 
 /**
  * Framework Module
@@ -40,7 +43,8 @@ import { ColumnManagerComponent } from './components/column-manager/column-manag
     BaseDataTableComponent,
     PanelContainerComponent,
     HierarchicalPickerComponent,
-    ColumnManagerComponent
+    ColumnManagerComponent,
+    TablePickerComponent
   ],
   imports: [
     CommonModule,
@@ -49,13 +53,16 @@ import { ColumnManagerComponent } from './components/column-manager/column-manag
     TableModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule
+    DropdownModule,
+    MultiSelectModule,
+    CheckboxModule
   ],
   exports: [
     BaseDataTableComponent,
     PanelContainerComponent,
     HierarchicalPickerComponent,
     ColumnManagerComponent,
+    TablePickerComponent,
     // Export Angular modules for convenience
     FormsModule,
     // Export CDK modules for convenience
@@ -64,7 +71,9 @@ import { ColumnManagerComponent } from './components/column-manager/column-manag
     TableModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule
+    DropdownModule,
+    MultiSelectModule,
+    CheckboxModule
   ]
 })
 export class FrameworkModule { }
